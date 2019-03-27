@@ -1,51 +1,95 @@
 //Copyright Code by Botty Mons (Dont steal our stuff) -> Taught By My Dawg Habib
 
-//define LED PIN on arduino
-#define LED_PIN 13
-
 //12 is echo, 13 is trigger
-#define Trig 13
-#define Echo 12
+#define trigSensorFront 13
+#define echoSensorFront 12
+#define trigSensorRight 11
+#define echoSensorRight 10
+#define trigSensorLeft 9
+#define echoSensorLeft 8
 
-long duration;
-int distance;
+long durationFront;
+int distanceFront;
+long durationRight;
+int distanceRight;
+long durationLeft;
+int distanceLeft;
+
+int ultrasonicFront(void){
+    //Code to run Ultrasonic Sensor
+  digitalWrite (trigSensorFront, LOW);
+  delayMicroseconds (2);
+
+  digitalWrite(trigSensorFront, HIGH);
+  delayMicroseconds (10);
+  digitalWrite (trigSensorFront, LOW);
+  durationFront = pulseIn(echoSensorFront, HIGH);
+  distanceFront = durationFront*0.034/2;
+  
+  //Serial.println(distance);
+  //delay(100);
+
+  return distanceFront;
+}
+
+int ultrasonicRight(void){
+    //Code to run Ultrasonic Sensor
+  digitalWrite (trigSensorRight, LOW);
+  delayMicroseconds (2);
+
+  digitalWrite(trigSensorRight, HIGH);
+  delayMicroseconds (10);
+  digitalWrite (trigSensorRight, LOW);
+  durationRight = pulseIn(echoSensorRight, HIGH);
+  distanceRight = durationRight*0.034/2;
+  
+  //Serial.println(distance);
+  //delay(100);
+
+  return distanceRight;
+}
+
+int ultrasonicLeft(void){
+    //Code to run Ultrasonic Sensor
+  digitalWrite (trigSensorLeft, LOW);
+  delayMicroseconds (2);
+
+  digitalWrite(trigSensorLeft, HIGH);
+  delayMicroseconds (10);
+  digitalWrite (trigSensorLeft, LOW);
+  durationLeft = pulseIn(echoSensorLeft, HIGH);
+  distanceLeft = durationLeft*0.034/2;
+  
+  //Serial.println(distance);
+  //delay(100);
+
+  return distanceLeft;
+}
+
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   
-  //Set LED_PIN to output mode
-  pinMode (LED_PIN, OUTPUT);
-  
   //Trig outputs data while Echo inputs data
-  pinMode (Trig, OUTPUT);
-  pinMode (Echo, INPUT);  
+  pinMode (trigSensorFront, OUTPUT);
+  pinMode (echoSensorFront, INPUT);
+  pinMode (trigSensorRight, OUTPUT);
+  pinMode (echoSensorRight, INPUT);
+  pinMode (trigSensorLeft, OUTPUT);
+  pinMode (echoSensorLeft, INPUT);  
+
 
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
-  //Turning the LED on and off
   
-  /*
-  digitalWrite(LED_PIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_PIN, LOW);
-  delay(1000);
-  */
-
-  //Code to run Ultrasonic Sensor
-  digitalWrite (Trig, LOW);
-  delayMicroseconds (2);
-
-  digitalWrite(Trig, HIGH);
-  delayMicroseconds (10);
-  digitalWrite (Trig, LOW);
-  duration = pulseIn(Echo, HIGH);
-  distance = duration*0.034/2;
-  
-  Serial.println(distance);
-  delay(500);
+  Serial.println("Front Sensor Value:");
+  Serial.println(ultrasonicFront());
+  Serial.println("Right Sensor Value:");
+  Serial.println(ultrasonicRight());
+  Serial.println("Left Sensor Value:");
+  Serial.println(ultrasonicLeft());
+  delay(200);
   
 }
