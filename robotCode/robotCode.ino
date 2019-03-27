@@ -19,16 +19,12 @@ void setup() {
   
   //Trig outputs data while Echo inputs data
   pinMode (Trig, OUTPUT);
-  pinMode (Echo, INPUT);
-
-  
+  pinMode (Echo, INPUT);  
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //Serial.println("Hello World!");
-
 
   //Turning the LED on and off
   
