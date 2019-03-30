@@ -1,4 +1,4 @@
-//yCopyright Code by Botty Mons (Dont steal our stuff) -> Taught By My Dawg Habib
+//Copyright Code by Botty Mons (Dont steal our stuff) -> Taught By My Dawg Habib
 
 //Sensor Variables
 #define trigSensorFront 13
@@ -7,52 +7,29 @@
 #define echoSensorRight 10
 #define trigSensorLeft 9
 #define echoSensorLeft 8
+#define motorB1A 5
+#define motorB1B 4
+#define motorA1A 3
+#define motorA1B 2
 
-long durationFront;
-int distanceFront;
-long durationRight;
-int distanceRight;
-long durationLeft;
-int distanceLeft;
+//UL Sensor Varaibles
+int leftDistance;
+int rightDistance;
+int frontDistance;
 
 //QRD Sensor Variables
 const int QRD1114_PIN = A0; // Sensor output voltage
 
 //Functions
-int ultrasonicFront(void){
-    //Code to run Ultrasonic Sensor
-  digitalWrite (trigSensorFront, LOW);
+int ultrasonicRead(int trig, int echo){
+  digitalWrite (trig, LOW);
   delayMicroseconds (2);
-  digitalWrite(trigSensorFront, HIGH);
+  digitalWrite(trig, HIGH);
   delayMicroseconds (10);
-  digitalWrite (trigSensorFront, LOW);
-  durationFront = pulseIn(echoSensorFront, HIGH);
-  distanceFront = durationFront*0.034/2;
-  return distanceFront;
-}
-
-int ultrasonicRight(void){
-    //Code to run Ultrasonic Sensor
-  digitalWrite (trigSensorRight, LOW);
-  delayMicroseconds (2);
-  digitalWrite(trigSensorRight, HIGH);
-  delayMicroseconds (10);
-  digitalWrite (trigSensorRight, LOW);
-  durationRight = pulseIn(echoSensorRight, HIGH);
-  distanceRight = durationRight*0.034/2;
-  return distanceRight;
-}
-
-int ultrasonicLeft(void){
-    //Code to run Ultrasonic Sensor
-  digitalWrite (trigSensorLeft, LOW);
-  delayMicroseconds (2);
-  digitalWrite(trigSensorLeft, HIGH);
-  delayMicroseconds (10);
-  digitalWrite (trigSensorLeft, LOW);
-  durationLeft = pulseIn(echoSensorLeft, HIGH);
-  distanceLeft = durationLeft*0.034/2;
-  return distanceLeft;
+  digitalWrite (trig, LOW);
+  long duration= pulseIn(echo, HIGH);
+  int distance = duration*0.034/2;
+  return distance;
 }
 
 int qrdSensor(void){
@@ -63,6 +40,29 @@ int qrdSensor(void){
     return 1; //White
   else
     return 0; //Black
+}
+
+void drive(int direction){
+  switch(direction){
+    case(0): //straight
+      digitalWrite(motorA1A, HIGH);
+      digitalWrite(motorA1B, LOW);
+      digitalWrite(motorB1A, HIGH);
+      digitalWrite(motorB1B, LOW);
+      break;
+      case(1): //left
+      digitalWrite(motorA1A, HIGH);
+      digitalWrite(motorA1B, LOW);
+      digitalWrite(motorB1A, LOW);
+      digitalWrite(motorB1B, HIGH);
+      break;
+      case(2): //right
+      digitalWrite(motorA1A, LOW);
+      digitalWrite(motorA1B, HIGH);
+      digitalWrite(motorB1A, HIGH);
+      digitalWrite(motorB1B, LOW);
+      break;
+  }
 }
 
 void setup() {
@@ -78,6 +78,10 @@ void setup() {
   pinMode (echoSensorRight, INPUT);
   pinMode (trigSensorLeft, OUTPUT);
   pinMode (echoSensorLeft, INPUT);  
+  pinMode (motorA1A, OUTPUT);
+  pinMode (motorA1B, OUTPUT);
+  pinMode (motorB1A, OUTPUT);
+  pinMode (motorB1B, OUTPUT);
   
   //QRD Pin Setup - AO  
   pinMode(QRD1114_PIN, INPUT);
@@ -85,16 +89,21 @@ void setup() {
 
 void loop() {
   //Taking Readings
-  Serial.println("Front Sensor Value:");
-  Serial.println(ultrasonicFront());
-  //Serial.println("Right Sensor Value:");
-  //Serial.println(ultrasonicRight());
-  //Serial.println("Left Sensor Value:");
-  //Serial.println(ultrasonicLeft());
+  frontDistance = ultrasonicRead(trigSensorFront,echoSensorFront);
+  leftDistance = ultrasonicRead(trigSensorLeft,echoSensorLeft);
+  rightDistance = ultrasonicRead(trigSensorRight,echoSensorRight);
+
+  Serial.println("Front Sensor Value: " + frontDistance);
+  //Serial.println("Left Sensor Value:" + leftDistance);
+  //Serial.println("Right Sensor Value:" + rightDistance);
+  
   Serial.println("QRD Sensor Value:");
   Serial.println(qrdSensor());
-  
-  delay(1000); 
+
   //Movement Algorithms(Using UL Sensors)
+   drive(0);
   //Defense Algorithms(Using QRD Sensors)
+
+   delay(1000); 
 }
+
