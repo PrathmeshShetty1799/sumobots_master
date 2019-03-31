@@ -139,6 +139,18 @@ void loop() {
   distanceRight = ultrasonicRead(trigSensorRight,echoSensorRight);
   Serial.println("Right Sensor Value: ");
   Serial.println(distanceRight);   
+
+  if (distanceFront < 80){
+    drive(0);
+  }
+  else if (distanceLeft < 80){
+    drive(1);
+    delay(1000);
+  }
+  else if (distanceRight < 80){
+    drive(3);
+    delay(1000);
+  }
 }  
   delay(500);  
 }
