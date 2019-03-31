@@ -115,42 +115,23 @@ void loop() {
   Serial.println("QRD Sensor Value: ");
   Serial.println(currentLoc);
 
-  if(currentLoc == 0){ //If the robot is close to the end of the ring, it drops everything and saves itself
-    drive(2); // Reverses
-    delay(1000);   
-
-    drive(1); //Turns Around
-    delay(2000);
-
-    drive(0);
-    delay(1000);
-  }
-
-  else{ 
   //If the robot is clear to attack the enemy
   distanceFront = ultrasonicRead(trigSensorFront,echoSensorFront);
   Serial.println("Front Sensor Value: ");
   Serial.println(distanceFront);
   
-  distanceLeft = ultrasonicRead(trigSensorLeft,echoSensorLeft);
-  Serial.println("Left Sensor Value: ");
-  Serial.println(distanceLeft);
+  //distanceLeft = ultrasonicRead(trigSensorLeft,echoSensorLeft);
+  //Serial.println("Left Sensor Value: ");
+  //Serial.println(distanceLeft);
 
-  distanceRight = ultrasonicRead(trigSensorRight,echoSensorRight);
-  Serial.println("Right Sensor Value: ");
-  Serial.println(distanceRight);   
+  //distanceRight = ultrasonicRead(trigSensorRight,echoSensorRight);
+  //Serial.println("Right Sensor Value: ");
+  //Serial.println(distanceRight);   
 
   if (distanceFront < 80){
     drive(0);
   }
-  else if (distanceLeft < 80){
+  else if (distanceFront > 80){
     drive(1);
-    delay(1000);
   }
-  else if (distanceRight < 80){
-    drive(3);
-    delay(1000);
-  }
-}  
-  delay(500);  
 }
